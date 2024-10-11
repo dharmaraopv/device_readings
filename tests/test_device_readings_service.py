@@ -6,7 +6,7 @@ from stores.device_store import DeviceStoreIface
 from stores.ts_store import TimeStampStoreIface
 from models import DeviceReadings, Reading
 from device_readings_service import DeviceReadingsService
-from stores.in_mem_device_store import DeviceStore
+from stores.in_mem_device_store import InMemoryDeviceStore
 from stores.in_memory_ts_store import InMemoryTimestampStore
 
 
@@ -132,7 +132,7 @@ class TestDeviceReadingsServiceFunctional(unittest.TestCase):
 
     def setUp(self):
         # Clear the in-memory stores before each test
-        self.in_mem_device_store = DeviceStore()
+        self.in_mem_device_store = InMemoryDeviceStore()
         self.in_mem_ts_store = InMemoryTimestampStore()
 
         # Initialize DeviceReadingsService with in-memory stores

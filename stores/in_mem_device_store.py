@@ -49,7 +49,7 @@ class DeviceReading(BaseModel, DeviceReadingIface):
                 self.latest_timestamp = timestamp
 
 
-class DeviceStore(DeviceStoreIface):
+class InMemoryDeviceStore(DeviceStoreIface):
     """
     Concrete implementation of DeviceStoreIface, managing device readings with a fixed capacity.
 
@@ -59,7 +59,7 @@ class DeviceStore(DeviceStoreIface):
 
     def __init__(self, capacity=100):
         """
-        Initialize the DeviceStore with a specified capacity.
+        Initialize the InMemoryDeviceStore with a specified capacity.
 
         Args:
             capacity (int): The maximum number of device readings to store.
@@ -116,4 +116,4 @@ class DeviceStore(DeviceStoreIface):
 
 
 # Initialize an in-memory device store with the capacity defined in settings.
-in_mem_device_store = DeviceStore(capacity=settings.DEVICE_STORE_CAPACITY)
+in_mem_device_store = InMemoryDeviceStore(capacity=settings.DEVICE_STORE_CAPACITY)

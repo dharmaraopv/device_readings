@@ -3,7 +3,7 @@ import unittest
 import uuid
 import datetime
 from stores.device_store import DeviceReadingIface
-from stores.in_mem_device_store import DeviceReading, DeviceStore  # Replace 'your_module' with the actual module name
+from stores.in_mem_device_store import DeviceReading, InMemoryDeviceStore  # Replace 'your_module' with the actual module name
 from tests.utils import run_multiples_threads
 
 
@@ -60,13 +60,13 @@ class TestDeviceReading(unittest.TestCase):
 class TestDeviceStore(unittest.TestCase):
 
     def setUp(self):
-        self.device_store = DeviceStore(capacity=2)
+        self.device_store = InMemoryDeviceStore(capacity=2)
         self.device_id_1 = uuid.uuid4()
         self.device_id_2 = uuid.uuid4()
         self.device_id_3 = uuid.uuid4()
 
     def test_initialization(self):
-        # Ensure the DeviceStore initializes with the correct capacity
+        # Ensure the InMemoryDeviceStore initializes with the correct capacity
         self.assertEqual(self.device_store.capacity, 2)
         self.assertEqual(len(self.device_store.store), 0)
 

@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI, Path, Response, status
+from fastapi import FastAPI, Response, status
 from device_readings_service import device_readings_service
 from models import DeviceReadings
 
@@ -45,7 +45,7 @@ def update_readings(readings: DeviceReadings, response: Response):
 
 
 @app.get("/api/devices/{device_id}/cumulative_count")
-def get_culumative_count(device_id: uuid.UUID, response: Response):
+def get_cumulative_count(device_id: uuid.UUID, response: Response):
     """
     Endpoint to retrieve the cumulative count of readings for a specified device.
 
