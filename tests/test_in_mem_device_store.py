@@ -4,7 +4,7 @@ import uuid
 import datetime
 from threading import Lock
 from pydantic import ValidationError
-from stores.device_store import DeviceReadingBase
+from stores.device_store import DeviceReadingIface
 from stores.in_mem_device_store import DeviceReading, DeviceStore  # Replace 'your_module' with the actual module name
 from tests.utils import run_multiples_threads
 
@@ -35,27 +35,27 @@ class TestDeviceReading(unittest.TestCase):
         self.assertEqual(self.device_reading.total_count, 500)
 
     def test_update_timestamp(self):
-        # Test that update_timestamp correctly updates the latest timestamp if it is newer
+        # Test that update_latest_timestamp correctly updates the latest timestamp if it is newer
         old_timestamp = datetime.datetime.now()
-        self.device_reading.update_timestamp(old_timestamp)
+        self.device_reading.update_latest_timestamp(old_timestamp)
         self.assertEqual(self.device_reading.latest_timestamp, old_timestamp)
 
         new_timestamp = datetime.datetime.now() + datetime.timedelta(seconds=10)
-        self.device_reading.update_timestamp(new_timestamp)
+        self.device_reading.update_latest_timestamp(new_timestamp)
         self.assertEqual(self.device_reading.latest_timestamp, new_timestamp)
 
         # Check that it does not update if the timestamp is older
         older_timestamp = datetime.datetime.now() - datetime.timedelta(seconds=5)
-        self.device_reading.update_timestamp(older_timestamp)
+        self.device_reading.update_latest_timestamp(older_timestamp)
         self.assertEqual(self.device_reading.latest_timestamp, new_timestamp)
 
     def test_update_timestamp_concurrent(self):
-        # Verify that update_timestamp correctly updates the latest timestamp with concurrent calls
+        # Verify that update_latest_timestamp correctly updates the latest timestamp with concurrent calls
         old_timestamp = datetime.datetime.now()
         args = [[old_timestamp + datetime.timedelta(seconds=10)*i] for i in range(10)]
         highest_timestamp = args[-1][0]
         random.shuffle(args)
-        run_multiples_threads(self.device_reading.update_timestamp, args)
+        run_multiples_threads(self.device_reading.update_latest_timestamp, args)
         self.assertEqual(self.device_reading.latest_timestamp, highest_timestamp)
 
 
@@ -75,7 +75,7 @@ class TestDeviceStore(unittest.TestCase):
     def test_get_or_create_device_reading(self):
         # Test that get_or_create_device_reading returns a DeviceReading object and adds it to the store
         reading = self.device_store.get_or_create_device_reading(self.device_id_1)
-        self.assertIsInstance(reading, DeviceReadingBase)
+        self.assertIsInstance(reading, DeviceReadingIface)
         self.assertIn(self.device_id_1, self.device_store.store)
 
     def test_manage_capacity_exceeds(self):
@@ -102,7 +102,7 @@ class TestDeviceStore(unittest.TestCase):
         # Test that get_device_reading returns a DeviceReading object if it exists in the store
         self.device_store.get_or_create_device_reading(self.device_id_1)
         reading = self.device_store.get_device_reading(self.device_id_1)
-        self.assertIsInstance(reading, DeviceReadingBase)
+        self.assertIsInstance(reading, DeviceReadingIface)
         self.assertEqual(reading.device_id, self.device_id_1)
 
     def test_get_device_reading_non_existent(self):

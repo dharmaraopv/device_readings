@@ -2,8 +2,8 @@ import unittest
 import uuid
 from datetime import datetime, timedelta
 from unittest.mock import Mock
-from stores.device_store import DeviceStoreBase
-from stores.ts_store import TimeStampStore
+from stores.device_store import DeviceStoreIface
+from stores.ts_store import TimeStampStoreIface
 from models import DeviceReadings, Reading
 from device_readings_service import DeviceReadingsService  # Replace 'your_module' with the actual module name
 
@@ -12,8 +12,8 @@ class TestDeviceReadingsService(unittest.TestCase):
 
     def setUp(self):
         # Mock the stores
-        self.mock_device_store = Mock(spec=DeviceStoreBase)
-        self.mock_ts_store = Mock(spec=TimeStampStore)
+        self.mock_device_store = Mock(spec=DeviceStoreIface)
+        self.mock_ts_store = Mock(spec=TimeStampStoreIface)
 
         # Instantiate the service with mocked stores
         self.service = DeviceReadingsService(
@@ -48,8 +48,8 @@ class TestDeviceReadingsService(unittest.TestCase):
         self.assertEqual(result, "")
         mock_device_reading.increment_count.assert_any_call(3)
         mock_device_reading.increment_count.assert_any_call(2)
-        mock_device_reading.update_timestamp.assert_any_call(self.timestamp_1)
-        mock_device_reading.update_timestamp.assert_any_call(self.timestamp_2)
+        mock_device_reading.update_latest_timestamp.assert_any_call(self.timestamp_1)
+        mock_device_reading.update_latest_timestamp.assert_any_call(self.timestamp_2)
 
     def test_add_device_readings_partial_existing_timestamps(self):
         # Mock one timestamp to be new and one to be existing
@@ -63,7 +63,7 @@ class TestDeviceReadingsService(unittest.TestCase):
         # Assert expected behavior
         self.assertEqual(result, "")
         mock_device_reading.increment_count.assert_called_once_with(3)
-        mock_device_reading.update_timestamp.assert_called_once_with(self.timestamp_1)
+        mock_device_reading.update_latest_timestamp.assert_called_once_with(self.timestamp_1)
 
     def test_add_device_readings_device_store_error(self):
         # Simulate device store raising a ValueError
