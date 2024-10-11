@@ -9,3 +9,10 @@ class TimeStampStore(ABC):
         # Check if the timestamp is already present in the store.
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def clear(self):
+        """
+        # Clear the store.
+        """
+        pass

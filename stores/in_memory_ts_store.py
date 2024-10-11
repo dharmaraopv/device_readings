@@ -1,6 +1,7 @@
 import uuid
 from collections import OrderedDict
 from .ts_store import TimeStampStore
+from config import settings
 
 
 def _key(device_id, timestamp):
@@ -16,6 +17,10 @@ class InMemoryTimestampStore(TimeStampStore):
 
     def __init__(self, capacity=1000):
         self.capacity = capacity
+
+        self._init_store()
+
+    def _init_store(self):
         self.store = OrderedDict()
 
     def __repr__(self):
@@ -37,10 +42,14 @@ class InMemoryTimestampStore(TimeStampStore):
 
         return existing is some_unique_value
 
+    def clear(self):
+        self._init_store()
+
     def _maintain_capacity(self, key):
         self.store.move_to_end(key)
         if len(self.store) > self.capacity:
             self.store.popitem(last=False)
 
 
-in_mem_ts_store = InMemoryTimestampStore()
+
+in_mem_ts_store = InMemoryTimestampStore(capacity=settings.TIMESTAMP_STORE_CAPACITY)

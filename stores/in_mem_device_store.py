@@ -2,7 +2,8 @@ import datetime
 import uuid
 from threading import Lock
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
+from config import settings
 
 from stores.device_store import DeviceReadingBase, DeviceStoreBase
 
@@ -26,11 +27,13 @@ class DeviceReading(BaseModel, DeviceReadingBase):
 
 
 class DeviceStore(DeviceStoreBase):
-    def __init__(self, capacity=1000):
-        self.store = {}
+    def __init__(self, capacity=1):
+        self._init_store()
         self.capacity = capacity
 
-    def manage_capacity(self):
+    def _init_store(self):
+        self.store = {}
+    def _manage_capacity(self):
         if len(self.store) > self.capacity:
             # Remove the latest item
             self.store.popitem()
@@ -38,12 +41,15 @@ class DeviceStore(DeviceStoreBase):
 
     def get_or_create_device_reading(self, device_id: uuid.UUID) -> DeviceReadingBase:
         device_reading = self.store.setdefault(device_id, DeviceReading(device_id=device_id))
-        self.manage_capacity()
+        self._manage_capacity()
 
         return device_reading
 
     def get_device_reading(self, device_id: uuid.UUID) -> DeviceReadingBase:
         return self.store.get(device_id)
 
+    def clear(self):
+        self._init_store()
 
-in_mem_device_store = DeviceStore()
+
+in_mem_device_store = DeviceStore(capacity=settings.DEVICE_STORE_CAPACITY)

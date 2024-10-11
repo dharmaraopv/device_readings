@@ -30,3 +30,10 @@ class DeviceStoreBase(ABC):
         Get the device reading from the store.
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def clear(self):
+        """
+        Clear the store.
+        """
+        pass

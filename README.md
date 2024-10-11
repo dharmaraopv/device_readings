@@ -4,7 +4,12 @@ The Device Readings project implements a web API that receives, stores, and retr
 
 ## Features
 
-- **Feature1** : Description
+- **In-Memory Timestamp Store**: An in-memory store for timestamps per device id, maintaining a fixed capacity and evicting the oldest timestamp if the capacity is exceeded.
+- **Device Readings API**: A web API that receives, stores, and retrieves in-memory device readings.
+- **Latest Reading Timestamp**: An endpoint for fetching the latest reading timestamp for a specific device.
+- **Cumulative Count**: An endpoint for fetching the cumulative count of readings for a specific device.
+- **Duplicate and Out-of-Order Data Handling**: The system handles duplicate and out-of-order data.
+- **Configurable Store Capacity**: The capacity of the timestamp store can be configured via settings.
 
 ## Installation
 
@@ -16,7 +21,7 @@ The Device Readings project implements a web API that receives, stores, and retr
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/dharmaraopv/device_reader
+   git clone https://github.com/dharmaraopv/device_readings
    cd device_reader
    ```
 
@@ -32,14 +37,7 @@ The Device Readings project implements a web API that receives, stores, and retr
    ```
 
 6. Run the application:
-   a. In-memory store:
-   ```bash
-   ENV=in_mem uvicorn main:app --reload
-   ```
-   b. Redis store:
-   ```bash
-    ENV=redis uvicorn main:app --reload
-   ```
+   MODE=PROD uvicorn main:app --reload
    
 7. Read the API documentation and try apis via [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
@@ -77,17 +75,18 @@ The Device Readings project implements a web API that receives, stores, and retr
 ## Project Structure
 
 ```plaintext
-├── device_reader/
-│   ├── __pycache__/
+├── device_readings/
 │   ├── stores/
 │   ├── tests/
+│   ├── config/
 │   ├── main.py
-│   ├── device_reader.py
-│   ├── settings.py
+│   ├── device_readins_service.py
 │   └── requirements.txt
 ```
 
 - **`main.py`**: The main entry point for the FastAPI application.
+- **`device_readings_service.py`**: The core logic for the device readings service.
+- **`stores/`**: Contains the data store implementations.
 - **`tests/`**: Test cases for the application.
 
 ## Documentation
@@ -96,13 +95,25 @@ Links to specific sections:
 * [Design considerations]()
 * [Request flow]()
 * [Edge Cases]()
+* [Future Improvements]()
 
 ## Testing
+The tests for this project are located in the `tests/` directory. They are designed to validate the functionality and robustness of the system. Here's an overview:
+
+1. **Unit Tests**: These tests are designed to test individual components of the application in isolation. In the provided example, the unit tests are mocking the `device_readings_service` to isolate the tests to the FastAPI routes. They are checking the behavior of the endpoints under normal conditions and when the service returns an error.
+
+2. **Validation Tests**: These tests are part of the unit tests and are specifically designed to test the behavior of the system when `device_readings_service` returns an error. They are checking the HTTP status code and the error message returned by the endpoints.
+
+3. **End-to-End Tests**: These tests are designed to test the system as a whole, from start to finish. They are running the actual server and making requests to it. In the provided example, they are checking the behavior of the endpoints under normal conditions.
+
+4. **Edge Cases**: These tests are designed to test the behavior of the system under unusual or extreme conditions. In the provided example, they are checking the behavior of the endpoints when trying to get the cumulative count or latest timestamp for a device that doesn't exist.
+
+Special cases in the tests include handling of errors returned by the `device_readings_service` and handling of non-existent devices. These cases are important to ensure that the system behaves correctly under all possible conditions.
 
 To run the tests:
 
 ```bash
-ENV=test pytest -v
+MODE=TEST pytest -v
 ```
 
 ## License
