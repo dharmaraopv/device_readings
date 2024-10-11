@@ -171,6 +171,10 @@ Implement logging to record important events and errors in the system. This will
 Implement CI and CD pipelines using github actions. Additionally, dockerize the application so that the same environment is guaranteed for dev, test and prod stages. Additionally, the application can be run on k8s. 
 ### Additional tests
 Identify and add additional test cases to cover edge cases and unusual conditions. This will help ensure the system's robustness and reliability.
+### Rate Limiting
+Add a rate limit for the number of requests per device in a given time. This will help prevent the service from getting overwhelmed by a few bad actors.
+### Authentication and Authorisation
+It is not clear who the application users are and whether the devices have auth capabilities. If these are needed, authentication and authorization should be implemented to restrict access to authenticated users/devices based on the roles.
 
 ## License
 
