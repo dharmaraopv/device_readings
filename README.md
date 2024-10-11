@@ -143,6 +143,7 @@ It uses FastAPI's TestClient to simulate HTTP requests and tests scenarios such 
 
 
 ## Connecting to external services
+### Persistence
 The system is designed to be easily extensible to connect to external services for persistence of data.
 This can be achieved by implementing the DeviceReadingsStore interface and the TimestampStore interface in the stores module. 
 The implementation of these interfaces can interact with external services like databases, cloud storage, or other data stores.
@@ -151,6 +152,8 @@ Here are few considerations for designing the external service connection:
 1. Addition of a new device to the store should be atomic.
 2. Updation of the device count and timestamp should be atomic.
 
+### Scaling
+With persistence, the application can be scaled to multiple servers by connecting a reverse proxy/load balancer.
 
 ## Future Improvements
 Following are additional improvements that can be made to the system:
@@ -164,6 +167,8 @@ Identify and handle additional edge cases that may arise in the system. Here are
 Implement a persistent data store (e.g., a database) to store device readings and timestamps. This will allow the system to maintain data across restarts and scale to handle larger volumes of data.
 ### Logging and monitoring
 Implement logging to record important events and errors in the system. This will help in debugging issues and monitoring the system's behavior.
+### CI/CD
+Implement CI and CD pipelines using github actions. Additionally, dockerize the application so that the same environment is guaranteed for dev, test and prod stages. Additionally, the application can be run on k8s. 
 ### Additional tests
 Identify and add additional test cases to cover edge cases and unusual conditions. This will help ensure the system's robustness and reliability.
 
