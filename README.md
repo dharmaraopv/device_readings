@@ -37,7 +37,9 @@ The Device Readings project implements a web API that receives, stores, and retr
    ```
 
 6. Run the application:
+    ```bash
    MODE=PROD uvicorn main:app --reload
+    ```
    
 7. Read the API documentation and try apis via [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
@@ -110,7 +112,7 @@ The tests for this project are located in the `tests/` directory. They are desig
 
 Special cases in the tests include handling of errors returned by the `device_readings_service` and handling of non-existent devices. These cases are important to ensure that the system behaves correctly under all possible conditions.
 
-To run the tests:
+### To run the tests:
 
 ```bash
 MODE=TEST pytest -v
