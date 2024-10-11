@@ -2,8 +2,6 @@ import random
 import unittest
 import uuid
 import datetime
-from threading import Lock
-from pydantic import ValidationError
 from stores.device_store import DeviceReadingIface
 from stores.in_mem_device_store import DeviceReading, DeviceStore  # Replace 'your_module' with the actual module name
 from tests.utils import run_multiples_threads

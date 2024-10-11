@@ -42,4 +42,3 @@ class TimeStampStoreIface(ABC):
             NotImplementedError: If the method is not implemented by a subclass.
         """
         pass
-

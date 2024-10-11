@@ -51,7 +51,7 @@ class TestInMemoryTimestampStore(unittest.TestCase):
     def test_concurrent_addition_of_same_timestamp(self):
         # Test that concurrent addition of the same timestamp is handled correctly
         timestamp = 1622540800
-        args = [(self.device_id,timestamp)] * 10
+        args = [(self.device_id, timestamp)] * 10
         result = run_multiples_threads(self.store.check_and_add_timestamp, args)
         count = 0
         for i in result:
@@ -59,6 +59,7 @@ class TestInMemoryTimestampStore(unittest.TestCase):
                 count += 1
         self.assertEqual(count, 1)
         self.assertIn(_key(self.device_id, timestamp), self.store.store)
+
 
 if __name__ == '__main__':
     unittest.main()
