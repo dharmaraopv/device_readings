@@ -110,7 +110,7 @@ The Device Readings project implements a web API that receives, stores, and retr
 
 ## Docuemntation
 ### Class design
-[![Screenshot 2024-10-11 at 9.25.01 AM.png](images%2FScreenshot%202024-10-11%20at%209.25.01%E2%80%AFAM.png)]
+![Screenshot 2024-10-11 at 9.25.01 AM.png](images%2FScreenshot%202024-10-11%20at%209.25.01%E2%80%AFAM.png)
 
 ## Testing
 ### To run the tests:
