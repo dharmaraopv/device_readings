@@ -13,6 +13,7 @@ class InMemoryTimestampStore(TimeStampStore):
 
     The store maintains a fixed capacity and evicts the oldest timestamp if the capacity is exceeded.
     """
+
     def __init__(self, capacity=1000):
         self.capacity = capacity
         self.store = OrderedDict()
@@ -40,3 +41,6 @@ class InMemoryTimestampStore(TimeStampStore):
         self.store.move_to_end(key)
         if len(self.store) > self.capacity:
             self.store.popitem(last=False)
+
+
+in_mem_ts_store = InMemoryTimestampStore()

@@ -1,5 +1,6 @@
 from threading import Thread
 
+
 def worker(fn, args, result, index):
     result[index] = fn(*args)
 

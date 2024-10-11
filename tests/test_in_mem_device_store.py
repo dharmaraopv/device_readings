@@ -6,7 +6,7 @@ from threading import Lock
 from pydantic import ValidationError
 from stores.device_store import DeviceReadingBase
 from stores.in_mem_device_store import DeviceReading, DeviceStore  # Replace 'your_module' with the actual module name
-from tests.test_utils import run_multiples_threads
+from tests.utils import run_multiples_threads
 
 
 class TestDeviceReading(unittest.TestCase):
@@ -72,31 +72,43 @@ class TestDeviceStore(unittest.TestCase):
         self.assertEqual(self.device_store.capacity, 2)
         self.assertEqual(len(self.device_store.store), 0)
 
-    def test_get_device_reading(self):
-        # Test that get_device_reading returns a DeviceReading object and adds it to the store
-        reading = self.device_store.get_device_reading(self.device_id_1)
+    def test_get_or_create_device_reading(self):
+        # Test that get_or_create_device_reading returns a DeviceReading object and adds it to the store
+        reading = self.device_store.get_or_create_device_reading(self.device_id_1)
         self.assertIsInstance(reading, DeviceReadingBase)
         self.assertIn(self.device_id_1, self.device_store.store)
 
     def test_manage_capacity_exceeds(self):
         # Add readings up to the capacity and ensure that exceeding capacity raises ValidationError
-        self.device_store.get_device_reading(self.device_id_1)
-        self.device_store.get_device_reading(self.device_id_2)
+        self.device_store.get_or_create_device_reading(self.device_id_1)
+        self.device_store.get_or_create_device_reading(self.device_id_2)
         with self.assertRaises(ValueError) as exc_info:
-            self.device_store.get_device_reading(self.device_id_3)
+            self.device_store.get_or_create_device_reading(self.device_id_3)
         self.assertEqual(str(exc_info.exception), "Capacity exceeded")
         self.assertEqual(len(self.device_store.store), 2)
 
     def test_store_maintains_capacity(self):
         # Add more readings than capacity and verify store size is maintained at capacity limit
-        self.device_store.get_device_reading(self.device_id_1)
-        self.device_store.get_device_reading(self.device_id_2)
+        self.device_store.get_or_create_device_reading(self.device_id_1)
+        self.device_store.get_or_create_device_reading(self.device_id_2)
         try:
-            self.device_store.get_device_reading(self.device_id_3)
+            self.device_store.get_or_create_device_reading(self.device_id_3)
         except ValueError:
             pass  # ValidationError expected due to capacity exceedance
 
         self.assertEqual(len(self.device_store.store), 2)
+
+    def test_get_device_reading(self):
+        # Test that get_device_reading returns a DeviceReading object if it exists in the store
+        self.device_store.get_or_create_device_reading(self.device_id_1)
+        reading = self.device_store.get_device_reading(self.device_id_1)
+        self.assertIsInstance(reading, DeviceReadingBase)
+        self.assertEqual(reading.device_id, self.device_id_1)
+
+    def test_get_device_reading_non_existent(self):
+        # Test that get_device_reading returns None if the device_id does not exist in the store
+        reading = self.device_store.get_device_reading(self.device_id_2)
+        self.assertIsNone(reading)
 
 
 if __name__ == '__main__':

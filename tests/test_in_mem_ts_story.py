@@ -1,6 +1,6 @@
 import unittest
 import uuid
-from .test_utils import run_multiples_threads
+from .utils import run_multiples_threads
 from stores.in_memory_ts_store import InMemoryTimestampStore, _key
 
 
