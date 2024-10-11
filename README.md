@@ -82,7 +82,7 @@ The Device Readings project implements a web API that receives, stores, and retr
 │   ├── tests/
 │   ├── config/
 │   ├── main.py
-│   ├── device_readins_service.py
+│   ├── device_readings_service.py
 │   └── requirements.txt
 ```
 
