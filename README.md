@@ -9,7 +9,7 @@ The Device Readings project implements a web API that receives, stores, and retr
 - **Cumulative Count**: An endpoint for fetching the cumulative count of readings for a specific device.
 - **Duplicate and Out-of-Order Data Handling**: The system handles duplicate and out-of-order data.
 - **In-Memory Timestamp Store**: An in-memory store for timestamps per device id, maintaining a fixed capacity and evicting the oldest timestamp if the capacity is exceeded.
-- **Configurable Store Capacity**: The capacity of the timestamp store can be configured via settings.
+- **Configurable Store Capacity**: The capacity of the device store can be configured via settings.
 
 ## Installation
 
